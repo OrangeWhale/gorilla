@@ -1,6 +1,9 @@
+import os
 import sys
 import numpy as np
 
+from glob import glob
+from subprocess import call
 from matplotlib import pyplot as plt
 from align_image_code import get_points
 from scipy.spatial import Delaunay
@@ -35,8 +38,8 @@ def main(name1, name2):
     im1 = plt.imread('./%s.jpg' % name1)/255.
     im2 = plt.imread('./%s.jpg' % name2)/255.
 
-    #get_points(name1)
-    #get_points(name2)
+    get_points(name1)
+    get_points(name2)
 
     face1 = np.load('./%s.npy' % name1)
     face2 = np.load('./%s.npy' % name2)
@@ -44,8 +47,13 @@ def main(name1, name2):
 
     ## Morph Sequence
     for step in range(45):
-        plt.imsave(('./%s%02d.jpg' % ((name1[:2]+name2[:2]),step)), \
+        plt.imsave('./%s%02d.jpg' % (name1[:2]+name2[:2],step), \
                 morph(im1, im2, face1, face2, tri, step/44., step/44.))
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
+    head = sys.argv[1][:2]+sys.argv[2][:2]
+    call(["convert","-delay","4",head+"[0-9][0-9].jpg","-loop","0",head+".gif"])
+    call(["mv",head+"22.jpg","mid.jpg"])
+    for step in range(45):
+        call(["rm","-f","./%s%02d.jpg" % (head,step)])
