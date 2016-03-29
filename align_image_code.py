@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def get_points(imname):
-    im = plt.imread('./%s.jpg' % imname)/255.
+    im = plt.imread('./{}'.format(imname))/255.
     shape = im.shape
     box = np.array([[0,0],[shape[1],0],[0,shape[0]],[shape[1],shape[0]]])
 
@@ -24,7 +24,7 @@ def get_points(imname):
     plt.close()
 
     f = np.concatenate((fore1, brows1, eyes1, nose1, mouth1, chin1, ears1, box))
-    np.save('./%s.npy' % imname, f[:,::-1])
+    np.savetxt('./{}.csv'.format(imname), f[:,::-1], delimiter=',')
 
 if __name__ == "__main__":
     print "YOLO"

@@ -34,26 +34,29 @@ def morph(im1, im2, im1_pts, im2_pts, tri, warp_frac, dissolve_frac):
                 (1-dissolve_frac)*im2[B[0], B[1]]
     return result
 
-def main(name1, name2):
-    im1 = plt.imread('./%s.jpg' % name1)/255.
-    im2 = plt.imread('./%s.jpg' % name2)/255.
+def main(name1, name2, head):
+    im1 = plt.imread('./{}'.format(name1))/255.
+    im2 = plt.imread('./{}'.format(name2))/255.
 
     get_points(name1)
     get_points(name2)
 
-    face1 = np.load('./%s.npy' % name1)
-    face2 = np.load('./%s.npy' % name2)
+    face1 = np.loadtxt('./{}.csv'.format(name1),delimiter=',')
+    face2 = np.loadtxt('./{}.csv'.format(name2),delimiter=',')
     tri = Delaunay((face1+face2)/2)
 
     ## Morph Sequence
     for step in range(45):
-        plt.imsave('./%s%02d.jpg' % (name1[:2]+name2[:2],step), \
-                morph(im1, im2, face1, face2, tri, step/44., step/44.))
+        plt.imsave('./{}{}.jpg'.format(head,step), \
+                morph(im2, im1, face2, face1, tri, step/44., step/44.))
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
-    head = sys.argv[1][:2]+sys.argv[2][:2]
+    if len(sys.argv) != 4:
+        exit("Usage: python main.py {image file 1} {image file 2} " + \
+                "{output prefix}")
+    main(sys.argv[1], sys.argv[2], sys.argv[3])
+    head = sys.argv[3]
     call(["convert","-delay","4",head+"[0-9][0-9].jpg","-loop","0",head+".gif"])
     call(["mv",head+"22.jpg","mid.jpg"])
     for step in range(45):
-        call(["rm","-f","./%s%02d.jpg" % (head,step)])
+        call(["rm","-f","./{}{}.jpg".format(head,step)])
