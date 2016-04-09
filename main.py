@@ -47,7 +47,7 @@ def main(name1, name2, head):
 
     ## Morph Sequence
     for step in range(45):
-        plt.imsave('./{}{}.jpg'.format(head,step), \
+        plt.imsave('./{}{:02d}.jpg'.format(head,step), \
                 morph(im2, im1, face2, face1, tri, step/44., step/44.))
 
 if __name__ == "__main__":
@@ -56,7 +56,7 @@ if __name__ == "__main__":
                 "{output prefix}")
     main(sys.argv[1], sys.argv[2], sys.argv[3])
     head = sys.argv[3]
-    call(["convert","-delay","4",head+"[0-9][0-9].jpg","-loop","0",head+".gif"])
+    call(["convert","-verbose","-delay","4",head+"[0-9][0-9].jpg","-loop","0",head+".gif"])
     call(["mv",head+"22.jpg","mid.jpg"])
     for step in range(45):
-        call(["rm","-f","./{}{}.jpg".format(head,step)])
+        call(["rm","-f","./{}{:02d}.jpg".format(head,step)])
