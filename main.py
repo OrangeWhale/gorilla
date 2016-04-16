@@ -38,6 +38,9 @@ def main(name1, name2, head):
     im1 = plt.imread('./{}'.format(name1))/255.
     im2 = plt.imread('./{}'.format(name2))/255.
 
+    im1 = im1[...,:3]
+    im2 = im2[...,:3]
+
     get_points(name1)
     get_points(name2)
 
