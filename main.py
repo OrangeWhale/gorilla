@@ -1,8 +1,6 @@
-import os
 import sys
 import numpy as np
 
-from glob import glob
 from subprocess import call
 from matplotlib import pyplot as plt
 from align_image_code import get_points
@@ -41,15 +39,15 @@ def main(name1, name2, head):
     im1 = im1[...,:3]
     im2 = im2[...,:3]
 
-    get_points(name1)
-    get_points(name2)
+    #get_points(name1)
+    #get_points(name2)
 
     face1 = np.loadtxt('./{}.csv'.format(name1),delimiter=',')
     face2 = np.loadtxt('./{}.csv'.format(name2),delimiter=',')
     tri = Delaunay((face1+face2)/2)
 
     ## Morph Sequence
-    for step in range(45):
+    for step in xrange(1,44):
         plt.imsave('./{}{:02d}.jpg'.format(head,step), \
                 morph(im2, im1, face2, face1, tri, step/44., step/44.))
 
@@ -61,5 +59,5 @@ if __name__ == "__main__":
     head = sys.argv[3]
     call(["convert","-verbose","-delay","4",head+"[0-9][0-9].jpg","-loop","0",head+".gif"])
     call(["mv",head+"22.jpg","mid.jpg"])
-    for step in range(45):
+    for step in xrange(1,44):
         call(["rm","-f","./{}{:02d}.jpg".format(head,step)])
