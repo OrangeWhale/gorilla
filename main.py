@@ -33,11 +33,8 @@ def morph(im1, im2, im1_pts, im2_pts, tri, warp_frac, dissolve_frac):
     return result
 
 def main(name1, name2, head):
-    im1 = plt.imread('./{}'.format(name1))/255.
-    im2 = plt.imread('./{}'.format(name2))/255.
-
-    im1 = im1[...,:3]
-    im2 = im2[...,:3]
+    im1 = plt.imread('./{}'.format(name1))[...,:3]/255.
+    im2 = plt.imread('./{}'.format(name2))[...,:3]/255.
 
     #get_points(name1)
     #get_points(name2)
